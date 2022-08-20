@@ -1,0 +1,17 @@
+.wrap {
+    margin: auto;
+    max-width: 1200px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.currency-exchange {
+    margin: 20px;
+}
+
+header {
+    margin: 20px;
+}

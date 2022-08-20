@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Офіційний курс гривні щодо іноземних валют</title>
+    <meta name="description"
+          content="Офіційний курс гривні щодо іноземних валют від Національного Банку Укріїни. Онлайн конвертор валют.">
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+
+<div class="container wrap">
+    <div class="d-flex flex-column">
+        <div class="text-center">
+            <header>
+                <h1>Офіційний курс гривні щодо іноземних валют</h1>
+            </header>
+            <div class="currency"></div>
+        </div>
+        <div class="row align-items-start currency-exchange">
+            <div class="col input-group">
+                <input id="input-1" type="text" class="form-control" aria-label="Sizing example input"
+                       aria-describedby="inputGroup-sizing-default">
+                <select id="left-select" class="form-select form-1" aria-label="Default select example">
+                    <option selected>USD</option>
+                    <option>EUR</option>
+                    <option>UAH</option>
+                </select>
+            </div>
+            <div class="col input-group">
+                <select id="right-select" class="form-select form-2" aria-label="Default select example">
+                    <option selected>UAH</option>
+                    <option>USD</option>
+                    <option>EUR</option>
+                </select>
+                <input id="input-2" type="text" class="form-control" aria-label="Sizing example input"
+                       aria-describedby="inputGroup-sizing-default">
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/exchangeRates.js"></script>
+</body>
+</html>
