@@ -21,35 +21,33 @@ async function showExchangeRate(currency) {
         `<p>${val.cc} (${val.txt}): ${val.rate.toFixed(2)}</p>`;
 }
 
-function convertСurrency(num, position) {
+function convertСurrency(num, convertFrom, convertTo) {
     if (num < 0) return 0;
 
-    let leftSelected = document.getElementById('left-select').selectedIndex;
-    let rightSelected = document.getElementById('right-select').selectedIndex;
+    let from = convertFrom.selectedIndex;
+    let to = convertTo.selectedIndex;
 
-    /* leftSelected: 0 (USD), 1 (USD), 2 (UAH); rightSelected: 0 (UAH), 1 (USD), 2 (EUR); */
-
-    if (rightSelected === 0) {
-        if (leftSelected === 0) return (position === 'left') ? num * courseUSD : num / courseUSD;
-        if (leftSelected === 1) return (position === 'left') ? num * courseEUR : num / courseEUR;
-        if (leftSelected === 2) return +num;
-    } else if (rightSelected === 1) {
-        if (leftSelected === 0) return +num;
-        if (leftSelected === 1) return (position === 'left') ? courseEUR / courseUSD * num : courseUSD / courseEUR * num;
-        if (leftSelected === 2) return (position === 'left') ? num / courseUSD : num * courseUSD;
-    } else if (rightSelected === 2) {
-        if (leftSelected === 0) return (position === 'left') ? courseUSD / courseEUR * num : courseEUR / courseUSD * num;
-        if (leftSelected === 1) return +num;
-        if (leftSelected === 2) return (position === 'left') ? num / courseEUR : num * courseEUR;
+    if (from === 0) {
+        if (to === 0) return +num;
+        if (to === 1) return courseUSD / courseEUR * num;
+        if (to === 2) return num * courseUSD;
+    } else if (from === 1) {
+        if (to === 0) return courseEUR / courseUSD * num;
+        if (to === 1) return +num;
+        if (to === 2) return num * courseEUR;
+    } else if (from === 2) {
+        if (to === 0) return num / courseUSD;
+        if (to === 1) return num / courseEUR;
+        if (to === 2) return +num;
     }
 }
 
 function changeRightInputValue() {
-    rightInput.value = convertСurrency(leftInput.value, 'left').toFixed(2);
+    rightInput.value = convertСurrency(leftInput.value, leftSelect, rightSelect).toFixed(2);
 }
 
 function changeLeftInputValue() {
-    leftInput.value = convertСurrency(rightInput.value, 'right').toFixed(2);
+    leftInput.value = convertСurrency(rightInput.value, rightSelect, leftSelect).toFixed(2);
 }
 
 showExchangeRate(EUR_ID);
