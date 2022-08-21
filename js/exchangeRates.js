@@ -10,6 +10,9 @@ let rightInput = document.querySelector('#input-2');
 let leftSelect = document.querySelector('#left-select');
 let rightSelect = document.querySelector('#right-select');
 
+exchangeRate(EUR);
+exchangeRate(USD);
+
 /* вывод нужных курсов на экран */
 
 async function exchangeRate(currency) {
@@ -18,26 +21,16 @@ async function exchangeRate(currency) {
     let val = json[currency];
 
     // меняем значение глобальных переменных courseUSD и courseEUR
-    if (currency === USD) courseUSD = +val.rate.toFixed(2);
-    if (currency === EUR) courseEUR = +val.rate.toFixed(2);
+    if (currency === USD) courseUSD = +val.rate.toFixed(2)
+    else if (currency === EUR) courseEUR = +val.rate.toFixed(2);
 
     document.querySelector('.currency').outerHTML +=
         `<p>${val.cc} (${val.txt}): ${val.rate.toFixed(2)}</p>`;
 }
 
-/* если поменялось значение слева, меняем значение справа и наоборот */
-
-function changeRightValue() {
-    rightInput.value = convert(leftInput.value, 'left').toFixed(2);
-}
-
-function changeLeftValue() {
-    leftInput.value = convert(rightInput.value, 'right').toFixed(2);
-}
-
-/* конвертация валют */
-
 function convert(num, position) {
+    if (num < 0) return 0;
+
     let leftSelected = document.getElementById('left-select').selectedIndex;
     let rightSelected = document.getElementById('right-select').selectedIndex;
 
@@ -49,25 +42,32 @@ function convert(num, position) {
     }
 
     // выбран USD справа
-    if (rightSelected === 1) {
+    else if (rightSelected === 1) {
         if (leftSelected === 0) return +num;
         if (leftSelected === 1) return (position === 'left') ? courseEUR / courseUSD * num : courseUSD / courseEUR * num;
         if (leftSelected === 2) return (position === 'left') ? num / courseUSD : num * courseUSD;
     }
 
     // выбран EUR справа
-    if (rightSelected === 2) {
+    else if (rightSelected === 2) {
         if (leftSelected === 0) return (position === 'left') ? courseUSD / courseEUR * num : courseEUR / courseUSD * num;
         if (leftSelected === 1) return +num;
         if (leftSelected === 2) return (position === 'left') ? num / courseEUR : num * courseEUR;
     }
 }
 
-exchangeRate(EUR);
-exchangeRate(USD);
 
-leftInput.oninput = changeRightValue;
-leftSelect.onchange = changeRightValue;
+
+function changeRightValue() {
+    rightInput.value = convert(leftInput.value, 'left').toFixed(2);
+}
+
+function changeLeftValue() {
+    leftInput.value = convert(rightInput.value, 'right').toFixed(2);
+}
 
 rightInput.oninput = changeLeftValue;
+leftInput.oninput = changeRightValue;
+
+leftSelect.onchange = changeRightValue;
 rightSelect.onchange = changeLeftValue;
