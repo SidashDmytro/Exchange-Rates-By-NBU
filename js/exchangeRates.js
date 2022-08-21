@@ -1,73 +1,62 @@
-const url = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json';
-
-const USD = 25;
-const EUR = 32;
+const URL = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json';
+const USD_ID = 25;
+const EUR_ID = 32;
 let courseUSD = 0;
 let courseEUR = 0;
 
-let leftInput = document.querySelector('#input-1');
-let rightInput = document.querySelector('#input-2');
+let leftInput = document.querySelector('#input-left');
+let rightInput = document.querySelector('#input-right');
 let leftSelect = document.querySelector('#left-select');
 let rightSelect = document.querySelector('#right-select');
 
-exchangeRate(EUR);
-exchangeRate(USD);
-
-/* вывод нужных курсов на экран */
-
-async function exchangeRate(currency) {
-    let response = await fetch(url);
+async function showExchangeRate(currency) {
+    let response = await fetch(URL);
     let json = await response.json();
     let val = json[currency];
 
-    // меняем значение глобальных переменных courseUSD и courseEUR
-    if (currency === USD) courseUSD = +val.rate.toFixed(2)
-    else if (currency === EUR) courseEUR = +val.rate.toFixed(2);
+    if (currency === USD_ID) courseUSD = +val.rate.toFixed(2)
+    else if (currency === EUR_ID) courseEUR = +val.rate.toFixed(2);
 
     document.querySelector('.currency').outerHTML +=
         `<p>${val.cc} (${val.txt}): ${val.rate.toFixed(2)}</p>`;
 }
 
-function convert(num, position) {
+function convertСurrency(num, position) {
     if (num < 0) return 0;
 
     let leftSelected = document.getElementById('left-select').selectedIndex;
     let rightSelected = document.getElementById('right-select').selectedIndex;
 
-    // выбран UAH справа
+    /* leftSelected: 0 (USD), 1 (USD), 2 (UAH); rightSelected: 0 (UAH), 1 (USD), 2 (EUR); */
+
     if (rightSelected === 0) {
         if (leftSelected === 0) return (position === 'left') ? num * courseUSD : num / courseUSD;
         if (leftSelected === 1) return (position === 'left') ? num * courseEUR : num / courseEUR;
         if (leftSelected === 2) return +num;
-    }
-
-    // выбран USD справа
-    else if (rightSelected === 1) {
+    } else if (rightSelected === 1) {
         if (leftSelected === 0) return +num;
         if (leftSelected === 1) return (position === 'left') ? courseEUR / courseUSD * num : courseUSD / courseEUR * num;
         if (leftSelected === 2) return (position === 'left') ? num / courseUSD : num * courseUSD;
-    }
-
-    // выбран EUR справа
-    else if (rightSelected === 2) {
+    } else if (rightSelected === 2) {
         if (leftSelected === 0) return (position === 'left') ? courseUSD / courseEUR * num : courseEUR / courseUSD * num;
         if (leftSelected === 1) return +num;
         if (leftSelected === 2) return (position === 'left') ? num / courseEUR : num * courseEUR;
     }
 }
 
-
-
-function changeRightValue() {
-    rightInput.value = convert(leftInput.value, 'left').toFixed(2);
+function changeRightInputValue() {
+    rightInput.value = convertСurrency(leftInput.value, 'left').toFixed(2);
 }
 
-function changeLeftValue() {
-    leftInput.value = convert(rightInput.value, 'right').toFixed(2);
+function changeLeftInputValue() {
+    leftInput.value = convertСurrency(rightInput.value, 'right').toFixed(2);
 }
 
-rightInput.oninput = changeLeftValue;
-leftInput.oninput = changeRightValue;
+showExchangeRate(EUR_ID);
+showExchangeRate(USD_ID);
 
-leftSelect.onchange = changeRightValue;
-rightSelect.onchange = changeLeftValue;
+rightInput.oninput = changeLeftInputValue;
+leftInput.oninput = changeRightInputValue;
+
+leftSelect.onchange = changeRightInputValue;
+rightSelect.onchange = changeLeftInputValue;
