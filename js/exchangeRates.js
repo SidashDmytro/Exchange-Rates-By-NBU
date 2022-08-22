@@ -9,6 +9,9 @@ let rightInput = document.querySelector('#input-right');
 let leftSelect = document.querySelector('#left-select');
 let rightSelect = document.querySelector('#right-select');
 
+localStorage.setItem('left', 0);
+localStorage.setItem('right', 0);
+
 async function showExchangeRate(currency) {
     let response = await fetch(URL);
     let json = await response.json();
@@ -43,10 +46,24 @@ function convertCurrency(num, convertFrom, convertTo) {
 }
 
 function changeRightInputValue() {
+
+    if (leftSelect.selectedIndex === rightSelect.selectedIndex) {
+        rightSelect.selectedIndex = localStorage.getItem('left');
+    } // If the same currency is selected, swap them
+    localStorage.left = leftSelect.selectedIndex;
+    localStorage.right = rightSelect.selectedIndex;
+
     rightInput.value = convertCurrency(leftInput.value, leftSelect, rightSelect).toFixed(2);
 }
 
 function changeLeftInputValue() {
+
+    if (rightSelect.selectedIndex === leftSelect.selectedIndex) {
+        leftSelect.selectedIndex = localStorage.getItem('right');
+    } // If the same currency is selected, swap them
+    localStorage.right = rightSelect.selectedIndex;
+    localStorage.left = leftSelect.selectedIndex;
+
     leftInput.value = convertCurrency(rightInput.value, rightSelect, leftSelect).toFixed(2);
 }
 
