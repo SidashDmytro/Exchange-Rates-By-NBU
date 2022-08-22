@@ -3,14 +3,13 @@ const USD_ID = 25;
 const EUR_ID = 32;
 let courseUSD = 0;
 let courseEUR = 0;
+let leftSelectedItem = 0;
+let rightSelectedItem = 2;
 
 let leftInput = document.querySelector('#input-left');
 let rightInput = document.querySelector('#input-right');
 let leftSelect = document.querySelector('#left-select');
 let rightSelect = document.querySelector('#right-select');
-
-localStorage.setItem('left', 0);
-localStorage.setItem('right', 0);
 
 async function showExchangeRate(currency) {
     let response = await fetch(URL);
@@ -45,33 +44,29 @@ function convertCurrency(num, convertFrom, convertTo) {
     }
 }
 
-function changeRightInputValue() {
-
+function changeInputValue(leftToRight) {
     if (leftSelect.selectedIndex === rightSelect.selectedIndex) {
-        rightSelect.selectedIndex = localStorage.getItem('left');
+        if (leftToRight) {
+            rightSelect.selectedIndex = leftSelectedItem;
+        } else {
+            leftSelect.selectedIndex = rightSelectedItem;
+        }
     } // If the same currency is selected, swap them
-    localStorage.left = leftSelect.selectedIndex;
-    localStorage.right = rightSelect.selectedIndex;
+    leftSelectedItem = leftSelect.selectedIndex;
+    rightSelectedItem = rightSelect.selectedIndex;
 
-    rightInput.value = convertCurrency(leftInput.value, leftSelect, rightSelect).toFixed(2);
-}
-
-function changeLeftInputValue() {
-
-    if (rightSelect.selectedIndex === leftSelect.selectedIndex) {
-        leftSelect.selectedIndex = localStorage.getItem('right');
-    } // If the same currency is selected, swap them
-    localStorage.right = rightSelect.selectedIndex;
-    localStorage.left = leftSelect.selectedIndex;
-
-    leftInput.value = convertCurrency(rightInput.value, rightSelect, leftSelect).toFixed(2);
+    if (leftToRight) {
+        rightInput.value = convertCurrency(leftInput.value, leftSelect, rightSelect).toFixed(2);
+    } else {
+        leftInput.value = convertCurrency(rightInput.value, rightSelect, leftSelect).toFixed(2);
+    }
 }
 
 showExchangeRate(EUR_ID);
 showExchangeRate(USD_ID);
 
-rightInput.oninput = changeLeftInputValue;
-leftInput.oninput = changeRightInputValue;
+rightInput.oninput = () => changeInputValue(false);
+leftInput.oninput = () => changeInputValue(true);
 
-leftSelect.onchange = changeRightInputValue;
-rightSelect.onchange = changeLeftInputValue;
+leftSelect.onchange = () => changeInputValue(true);
+rightSelect.onchange = () => changeInputValue(false);
