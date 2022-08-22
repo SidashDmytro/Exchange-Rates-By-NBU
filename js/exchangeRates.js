@@ -21,21 +21,21 @@ async function showExchangeRate(currency) {
         `<p>${val.cc} (${val.txt}): ${val.rate.toFixed(2)}</p>`;
 }
 
-function convertСurrency(num, convertFrom, convertTo) {
+function convertCurrency(num, convertFrom, convertTo) {
     if (num < 0) return 0;
 
     let from = convertFrom.selectedIndex;
     let to = convertTo.selectedIndex;
 
-    if (from === 0) {
+    if (from === 0) { // selected USD
         if (to === 0) return +num;
         if (to === 1) return courseUSD / courseEUR * num;
         if (to === 2) return num * courseUSD;
-    } else if (from === 1) {
+    } else if (from === 1) { // selected EUR
         if (to === 0) return courseEUR / courseUSD * num;
         if (to === 1) return +num;
         if (to === 2) return num * courseEUR;
-    } else if (from === 2) {
+    } else if (from === 2) { // selected UAH
         if (to === 0) return num / courseUSD;
         if (to === 1) return num / courseEUR;
         if (to === 2) return +num;
@@ -43,11 +43,11 @@ function convertСurrency(num, convertFrom, convertTo) {
 }
 
 function changeRightInputValue() {
-    rightInput.value = convertСurrency(leftInput.value, leftSelect, rightSelect).toFixed(2);
+    rightInput.value = convertCurrency(leftInput.value, leftSelect, rightSelect).toFixed(2);
 }
 
 function changeLeftInputValue() {
-    leftInput.value = convertСurrency(rightInput.value, rightSelect, leftSelect).toFixed(2);
+    leftInput.value = convertCurrency(rightInput.value, rightSelect, leftSelect).toFixed(2);
 }
 
 showExchangeRate(EUR_ID);
