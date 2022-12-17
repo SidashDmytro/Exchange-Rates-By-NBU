@@ -1,1 +1,1 @@
-# Example of work https://public-pc.com/exchange-rate/
+# Developer API (National Bank of Ukraine): https://bank.gov.ua/ua/open-data/api-dev
